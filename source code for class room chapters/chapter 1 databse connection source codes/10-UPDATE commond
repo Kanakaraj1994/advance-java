@@ -1,0 +1,91 @@
+package sq;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+public class Hk {
+
+	public static void main(String[] args) {
+		
+		
+		String Driver="com.mysql.jdbc.Driver";
+		String url="jdbc:mysql://localhost:3306/test";//test dbname
+		String password= "";
+		String userid="root";
+		
+		
+			 try {
+				 Class.forName(Driver);//loading driver first
+				 //2nd key
+				 Connection con = DriverManager.getConnection(url, userid, password);//three overloaded method im taking 3rd 3 parameters
+				 Statement oensconnections = con.createStatement();
+				
+				
+				
+				oensconnections.execute("CREATE DATABASE IF NOT EXISTS testp");//database exits 
+				 oensconnections.execute("USE testp");
+		           /**
+		            * Create and select a database for use. 
+		            */
+				 oensconnections.execute("DROP TABLE IF EXISTS people");
+				 oensconnections.execute("CREATE TABLE people (" +
+		                   "id BIGINT NOT NULL AUTO_INCREMENT,"
+		                   + "fname VARCHAR(25),"
+		                   + "lname VARCHAR(25),"
+		                   + "PRIMARY KEY(id)"
+		                   + ")");
+				// oensconnections.execute(" ALTER TABLE people ADD COLUMN phone_no int(20)" );
+				 
+				 oensconnections.execute("INSERT INTO people (fname, lname) VALUES" +  
+		                   "('Joe', 'Bloggs'), ('Mary', 'Bloggs'), ('Jill', 'Hill')");
+				 
+				 //ResultSet res = oensconnections.executeQuery("SELECT * FROM people WHERE lname = 'hill'");
+				ResultSet res = oensconnections.executeQuery("SELECT * FROM people");
+				
+		           /**
+		            * Iterate over the result set from the above query
+		            */
+				 
+				
+		          while (res.next())
+		         {
+		               System.out.println(res.getString("fname") + " " + res.getString("lname"));
+		          }
+		           
+		          res.close();
+		          oensconnections.executeUpdate("DELETE FROM  people  WHERE id=1");
+		          ResultSet res2 = oensconnections.executeQuery("SELECT * FROM people");
+		          while (res2.next())
+			         {
+			               System.out.println(res2.getString("fname") + " " + res2.getString("lname"));
+			          }
+		          res2.close();
+		         //update
+		          oensconnections.executeUpdate("UPDATE   people"+" SET lname='student' WHERE id=2");
+		          ResultSet res3 = oensconnections.executeQuery("SELECT * FROM people");
+		          while (res3.next())
+			         {
+			               System.out.println(res3.getString("fname") + " " + res3.getString("lname"));
+			          }
+		          res3.close();
+		         
+				  
+				 con.close();
+		           
+			 }catch(Exception e) {
+				 
+				 e.printStackTrace();
+			 }
+		   }	
+	
+		
+		
+		
+		
+		
+		
+	
+
+}
